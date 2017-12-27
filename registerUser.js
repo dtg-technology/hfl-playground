@@ -28,18 +28,6 @@ var config = {
         ca_name: 'ca.org3.example.com',
         msp:  'Org3MSP'
     },
-    distributor1: {
-      ca_port: 7058,
-      ca_name: 'ca.distr.tracelabel.com',
-      msp:  'TraceLabelMSP'
-    },
-    distributor2: {
-      ca_port: 7058,
-      ca_name: 'ca.distr.tracelabel.com',
-      msp:  'TraceLabelMSP',
-      affiliation_root: 'admin',
-      affiliation: 'default'
-    },
     tracelabel: {
       ca_port: 7057,
       ca_name: 'ca.tracelabel.com',
@@ -48,9 +36,23 @@ var config = {
     admin_distributors: {
       ca_port: 7058,
       ca_name: 'ca.admin.distr.tracelabel.com',
-      msp:  'TraceLabelMSP',
+      msp:  'DistributorsMSP',
       affiliation_root: 'administration',
       affiliation: 'default'
+    },
+    distributor1: {
+      ca_port: 7058,
+      ca_name: 'ca.distr1.distr.tracelabel.com',
+      msp:  'Distributor1MSP',
+      affiliation_root: 'distributor1',
+      affiliation: 'department1'
+    },
+    distributor2: {
+      ca_port: 7058,
+      ca_name: 'ca.distr2.distr.tracelabel.com',
+      msp:  'Distributor2MSP',
+      affiliation_root: 'distributor2',
+      affiliation: 'department1'
     }
 };
 

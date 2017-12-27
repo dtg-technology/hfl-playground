@@ -268,7 +268,7 @@ cacount:
 cafiles:
   - ca/ca1/fabric-ca-config.yaml
   - ca/ca2/fabric-ca-config.yaml
-#  - ca/ca3/fabric-ca-config.yaml
+  - ca/ca3/fabric-ca-config.yaml
 
 #############################################################################
 # Intermediate CA section

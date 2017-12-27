@@ -33,25 +33,6 @@ let config = {
 		msp: "Brand2MSP",
 		storePath: path.join(__dirname, 'hfc-key-store/brand2')
 	},
-	org3: {
-		userOrg: "org3",
-		url: "grpc://localhost:7071",
-		url2: "grpc://localhost:7073",
-		msp: "Org3MSP",
-		storePath: path.join(__dirname, 'hfc-key-store/org3')
-	},
-	distributor1: {
-		userOrg: "distributor1",
-		url: "grpc://localhost:0000",
-		msp: "Distributor1MSP",
-		storePath: path.join(__dirname, 'hfc-key-store/distributor1')
-	},
-	distributor2: {
-		userOrg: "distributor2",
-		url: "grpc://localhost:0000",
-		msp: "Distributor2MSP",
-		storePath: path.join(__dirname, 'hfc-key-store/distributor2')
-	},
 	tracelabel: {
 		url: "grpc://localhost:7071",
 		url2: "grpc://localhost:7073",
@@ -61,8 +42,22 @@ let config = {
 	admin_distributors: {
 		url: "grpc://localhost:7071",
 		url2: "grpc://localhost:7073",
-		msp: "TraceLabelMSP",
+		msp: "DistributorsMSP",
 		storePath: path.join(__dirname, 'hfc-key-store/admin_distributors')
+	},
+	distributor1: {
+		userOrg: "distributor1",
+		url: "grpc://localhost:7071",
+		url2: "grpc://localhost:7073",
+		msp: "Distributor1MSP",
+		storePath: path.join(__dirname, 'hfc-key-store/distributor1')
+	},
+	distributor2: {
+		userOrg: "distributor2",
+		url: "grpc://localhost:7071",
+		url2: "grpc://localhost:7073",
+		msp: "Distributor2MSP",
+		storePath: path.join(__dirname, 'hfc-key-store/distributor2')
 	}
 };
 
@@ -84,6 +79,7 @@ var tx_id = null;
 
 
 console.log(`\n[ Invoking \"${channel.getName()}\", user -> ${userOrg}, peer -> ${peerOrg} ]\n`);
+console.log(' Store path:'+ store_path + '\n Peer URL: ' + peer.getUrl() + "\n");
 // create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
 Fabric_Client.newDefaultKeyValueStore({ path: store_path
 }).then((state_store) => {

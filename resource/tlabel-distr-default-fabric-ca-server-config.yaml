@@ -77,13 +77,13 @@ tls:
 #############################################################################
 ca:
   # Name of this CA
-  name: Distributor1
+  name:
   # Key file (default: ca-key.pem)
   keyfile: ca-key.pem
   # Certificate file (default: ca-cert.pem)
   certfile: ca-cert.pem
   # Chain file (default: chain-cert.pem)
-  chainfile: ca-chain.pem
+  chainfile:
 
 #############################################################################
 #  The registry section controls how the fabric-ca-server does two things:
@@ -164,9 +164,8 @@ ldap:
 #  Affiliation section
 #############################################################################
 affiliations:
-   distributor1:
-      - department1
-      - department2
+
+
 
 #############################################################################
 #  Signing section
@@ -214,19 +213,17 @@ signing:
 #     CA certificates though it can still issue end entity certificates.
 ###########################################################################
 csr:
-   cn: Distributor1
+   cn:
    names:
       - C: RU
-        ST: "Moscow"
-        L:
-        O: Distributor1
-        OU: CA
+        ST: Moscow
+        L: Moscow
+        O: TraceLabelDistributors
+        OU:
    hosts:
-     - 424d3bbcf5a8
-     - localhost
    ca:
       expiry: 131400h
-      pathlength: 1
+      pathlength: 0
 
 #############################################################################
 # BCCSP (BlockChain Crypto Service Provider) section is used to select which
@@ -269,6 +266,9 @@ bccsp:
 cacount:
 
 cafiles:
+  - ca/ca1/fabric-ca-config.yaml
+  - ca/ca2/fabric-ca-config.yaml
+  - ca/ca3/fabric-ca-config.yaml
 
 #############################################################################
 # Intermediate CA section

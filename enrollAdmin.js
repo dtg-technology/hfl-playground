@@ -23,16 +23,6 @@ var config = {
         ca_name: 'ca.brand2.com',
         msp:  'Brand2MSP'
     },
-    distributor1: {
-        ca_port: 7058,
-        ca_name: 'ca.distr.tracelabel.com',
-        msp:  'TraceLabelMSP'
-    },
-    distributor2: {
-      ca_port: 7058,
-      ca_name: 'ca.distr.tracelabel.com',
-      msp:  'Distributor1MSP'
-    },
     tracelabel: {
       ca_port: 7057,
       ca_name: 'ca.tracelabel.com',
@@ -41,9 +31,18 @@ var config = {
     admin_distributors: {
       ca_port: 7058,
       ca_name: 'ca.admin.distr.tracelabel.com',
-      msp:  'TraceLabelMSP'
+      msp:  'DistributorsMSP'
+    },
+    distributor1: {
+        ca_port: 7058,
+        ca_name: 'ca.distr1.distr.tracelabel.com',
+        msp:  'Distributor1MSP'
+    },
+    distributor2: {
+      ca_port: 7058,
+      ca_name: 'ca.distr2.distr.tracelabel.com',
+      msp:  'Distributor2MSP'
     }
-
 };
 
 let [,, org] = process.argv;

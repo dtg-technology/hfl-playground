@@ -88,13 +88,16 @@ services:
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d '
     # sh -c 'fabric-ca-server start -b admin:adminpw -d --cafiles ca/ca1/fabric-ca-config.yaml --cafiles ca/ca2/fabric-ca-config.yaml'
     volumes:
-          - ./resource/tlabel-default-fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml:ro
+          - ./resource/tlabel-distr-default-fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml:ro
           # CA admin.distr.tracelabel.com
           - ./crypto-config/peerOrganizations/admin.distr.tracelabel.com/ca:/etc/hyperledger/fabric-ca-server/ca/ca1/
           - ./resource/distr-admin-fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/ca/ca1/fabric-ca-config.yaml:ro
           # CA distr1.distr.tracelabel.com
-          - ./crypto-config/peerOrganizations/distr1.distr.tracelabel.com/ca:/etc/hyperledger/fabric-ca-server/ca/ca2/
+          - ./crypto-config/peerOrganizations/distributor1.com/ca:/etc/hyperledger/fabric-ca-server/ca/ca2/
           - ./resource/distr-distr1-fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/ca/ca2/fabric-ca-config.yaml:ro
+          # CA distr2.distr.tracelabel.com
+          - ./crypto-config/peerOrganizations/distributor2.com/ca:/etc/hyperledger/fabric-ca-server/ca/ca3/
+          - ./resource/distr-distr2-fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/ca/ca3/fabric-ca-config.yaml:ro
     networks:
       - basic
     depends_on:
@@ -113,7 +116,9 @@ services:
     volumes:
       - ${CA_CLI_PATH}:/etc/hyperledger/client
       - ./crypto-config/peerOrganizations/distributor1.com/msp:/etc/hyperledger/client/distr1
-      - ./crypto-config/peerOrganizations/distr.tracelabel.com/msp:/etc/hyperledger/client/distributors
+      - ./crypto-config/peerOrganizations/distributor2.com/msp:/etc/hyperledger/client/distr2
+      - ./crypto-config/peerOrganizations/distributors.com/msp:/etc/hyperledger/client/distributors
+      - ./crypto-config/peerOrganizations/distributors.com/peers/peer0.distributors.com/msp:/etc/hyperledger/client/peer0.distributors.com
       - ./crypto-config/ordererOrganizations/tracelabel.com/msp:/etc/hyperledger/client/tracelabel
       - ./resource/fabric-ca-client-config.yaml:/etc/hyperledger/client/fabric-ca-client-config.yaml
 #      - ./crypto-config/peerOrganizations/tracelabel.com/peers/peer0.tracelabel.com/msp:/etc/hyperledger/client/peer0.tracelabel.com
@@ -222,23 +227,62 @@ services:
     networks:
       - basic
 
-  peer0.tracelabel.com:
-    container_name: peer0.tracelabel.com
+  # peer0.tracelabel.com:
+  #   container_name: peer0.tracelabel.com
+  #   image: hyperledger/fabric-peer
+  #   environment:
+  #     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+  #     - CORE_PEER_ID=peer0.tracelabel.com
+  #     - CORE_LOGGING_PEER=debug
+  #     - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+  #     - CORE_PEER_LOCALMSPID=TraceLabelMSP
+  #     - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+  #     - CORE_PEER_ADDRESS=peer0.tracelabel.com:7051
+  #     # # the following setting starts chaincode containers on the same
+  #     # # bridge network as the peers
+  #     # # https://docs.docker.com/compose/networking/
+  #     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
+  #     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=tracelabel.couchdb:5984
+  #     # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+  #     # provide the credentials for ledger to connect to CouchDB.  The username and password must
+  #     # match the username and password set for the associated CouchDB.
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+  #     - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+  #   working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+  #   command: peer node start
+  #   # command: peer node start --peer-chaincodedev=true
+  #   ports:
+  #     - 7071:7051
+  #     - 7073:7053
+  #   volumes:
+  #       - /var/run/:/host/var/run/
+  #       - ./crypto-config/peerOrganizations/tracelabel.com/peers/peer0.tracelabel.com/msp:/etc/hyperledger/msp/peer:ro
+  #       - ./crypto-config/peerOrganizations/tracelabel.com/users:/etc/hyperledger/msp/users:ro
+  #       - ./config:/etc/hyperledger/configtx
+  #   depends_on:
+  #     - orderer.tracelabel.com
+  #     - tracelabel.couchdb
+  #   networks:
+  #     - basic
+
+  peer0.distributors.com:
+    container_name: peer0.distributors.com
     image: hyperledger/fabric-peer
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_PEER_ID=peer0.tracelabel.com
+      - CORE_PEER_ID=peer0.distr.tracelabel.com
       - CORE_LOGGING_PEER=debug
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_LOCALMSPID=TraceLabelMSP
+      - CORE_PEER_LOCALMSPID=DistributorsMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
-      - CORE_PEER_ADDRESS=peer0.tracelabel.com:7051
+      - CORE_PEER_ADDRESS=peer0.distributors.com:7051
       # # the following setting starts chaincode containers on the same
       # # bridge network as the peers
       # # https://docs.docker.com/compose/networking/
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=tracelabel.couchdb:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=distributors.couchdb:5984
       # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
       # provide the credentials for ledger to connect to CouchDB.  The username and password must
       # match the username and password set for the associated CouchDB.
@@ -252,12 +296,12 @@ services:
       - 7073:7053
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/tracelabel.com/peers/peer0.tracelabel.com/msp:/etc/hyperledger/msp/peer:ro
-        - ./crypto-config/peerOrganizations/tracelabel.com/users:/etc/hyperledger/msp/users:ro
+        - ./crypto-config/peerOrganizations/distributors.com/peers/peer0.distributors.com/msp:/etc/hyperledger/msp/peer:ro
+        - ./crypto-config/peerOrganizations/distributors.com/users:/etc/hyperledger/msp/users:ro
         - ./config:/etc/hyperledger/configtx
     depends_on:
       - orderer.tracelabel.com
-      - tracelabel.couchdb
+      - distributors.couchdb
     networks:
       - basic
 
@@ -287,8 +331,8 @@ services:
     networks:
       - basic
 
-  tracelabel.couchdb:
-    container_name: tracelabel.couchdb
+  distributors.couchdb:
+    container_name: distributors.couchdb
     image: hyperledger/fabric-couchdb
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.

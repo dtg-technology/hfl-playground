@@ -61,6 +61,7 @@ const request = {
 
 let user = null;
 console.log(`\n[ Querying \"${channel.getName()}\", user -> ${userOrg}, peer -> ${peerOrg} ]\n`);
+console.log(' Store path:'+ storePath + '\n Peer URL: ' + peer.getUrl() + "\n");
 // create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
 Fabric_Client.newDefaultKeyValueStore({ path: storePath
 }).then((state_store) => {

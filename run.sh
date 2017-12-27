@@ -1,5 +1,5 @@
 #!/bin/bash -e
-
+echo -e "\n"
 . ./lib/set_env.sh
 
 ./start.sh $1
