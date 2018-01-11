@@ -46,7 +46,7 @@ spec:
         tier: middle
     spec:
       containers:
-      - image: registry.au-syd.bluemix.net/tracelabel/fabric-ca:latest
+      - image: registry.eu-de.bluemix.net/hyperledger/fabric-ca:latest
         name: fabric-ca
         env:
         - name: FABRIC_CA_HOME
@@ -54,9 +54,9 @@ spec:
         - name: FABRIC_CA_SERVER_CA_NAME
           value: ca.brand1.com
         - name: FABRIC_CA_SERVER_CA_CERTFILE
-          value: /etc/hyperledger/fabric-ca-server-config/ca.brand1.com-cert.pem
+          value: /etc/hyperledger/fabric-ca-server-config/ca-cert.pem
         - name: FABRIC_CA_SERVER_CA_KEYFILE
-          value: /etc/hyperledger/fabric-ca-server-config/a256e64dcd4e874a5149391724c72558c8a5267a82b3a1a4b193d1a294421bb0_sk
+          value: /etc/hyperledger/fabric-ca-server-config/ca-key.pem
         ports:
         - containerPort: 7054
           name: ca

@@ -35,8 +35,10 @@ echo "--------> checking secret '${RES_NAME}'${reset}"
 output=$(kubectl get secret ${RES_NAME} > /dev/null 2>&1 )
 if [ $? -eq 1 ]; then
    echo "--------> creating secret '${RES_NAME}'${reset}"
-   kubectl create secret generic ${RES_NAME}  --from-file=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca/$CA_PRIVATE_KEY \
-                                              --from-file=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca/ca.${BRAND_SHORT}.com-cert.pem
+   kubectl create secret generic ${RES_NAME}  --from-file=ca-key.pem=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca/$CA_PRIVATE_KEY \
+                                              --from-file=ca-cert.pem=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca/ca.${BRAND_SHORT}.com-cert.pem \
+                                              --from-file=fabric-ca-server-config.yaml=../resource/brand1-fabric-ca-server-config.yaml
+
 else
    echo "--------> exists${reset}"
 fi
@@ -103,6 +105,9 @@ echo "--------> creating persistent volume for couchdb ${reset}"
 kubectl apply -f ${CONFIG}/volumes.yml
 echo "--------> creating couchdb service${reset}"
 kubectl apply -f ${CONFIG}/service-couchdb.yml
-#kubectl apply -f ${CONFIG}/service-peer.yml
+echo "--------> creating peer service${reset}"
+kubectl apply -f ${CONFIG}/service-peer.yml
 
 echo "${msg}===> ${BRAND} deployed to Bluemix.${reset}"
+
+kubectl get pods -l org=${BRAND}

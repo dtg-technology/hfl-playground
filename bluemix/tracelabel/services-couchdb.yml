@@ -19,20 +19,22 @@ spec:
 
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: tracelabel-db-pv-claim
+  name: tracelabel-db-pv
   labels:
-    app: tracelabel
-    org: brand1
-    node: peer
-    tier: db
+    type: local
 spec:
+  capacity:
+    storage: 1G
   accessModes:
     - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1G
+  persistentVolumeReclaimPolicy: Recycle
+  hostPath:
+    path: /tmp/data/tracelabel-db-pv
+
+
+
 ---
 apiVersion: apps/v1beta1 # for versions before 1.8.0 use apps/v1beta1
 kind: Deployment
@@ -61,7 +63,7 @@ spec:
         tier: db
     spec:
       containers:
-      - image: registry.au-syd.bluemix.net/tlabel/fabric-couchdb:latest
+      - image: registry.eu-de.bluemix.net/hyperledger/fabric-couchdb:latest
         name: couchdb
         env:
         - name: COUCHDB_USER

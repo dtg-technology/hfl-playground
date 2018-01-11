@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: brand-1-peer
+  name: brand-2-peer
   labels:
     app: tracelabel
-    org: brand-1
+    org: brand-2
     node: peer
     tier: middle
 spec:
@@ -12,13 +12,13 @@ spec:
   ports:
     - port: 7051
       name: listen
-      nodePort: 30061
+      nodePort: 30071
     - port: 7053
       name: events
-      nodePort: 30063
+      nodePort: 30073
   selector:
     app: tracelabel
-    org: brand-1
+    org: brand-2
     node: peer
     tier: middle
 
@@ -30,14 +30,14 @@ metadata:
   name: peer
   labels:
     app: tracelabel
-    org: brand-1
+    org: brand-2
     node: peer
     tier: middle
 spec:
   selector:
     matchLabels:
       app: tracelabel
-      org: brand-1
+      org: brand-2
       node: peer
       tier: middle
   strategy:
@@ -46,18 +46,18 @@ spec:
     metadata:
       labels:
         app: tracelabel
-        org: brand-1
+        org: brand-2
         node: peer
         tier: middle
     spec:
       containers:
-      - image: registry.au-syd.bluemix.net/tracelabel/fabric-peer:latest
+      - image: registry.eu-de.bluemix.net/hyperledger/fabric-peer:latest
         name: fabric-peer
         env:
         - name: CORE_VM_ENDPOINT
           value: unix:///host/var/run/docker.sock
         - name: CORE_PEER_ID
-          value: peer0.brand1.com
+          value: peer0.brand2.com
         - name: CORE_LOGGING_PEER
           value: debug
         - name: CORE_CHAINCODE_LOGGING_LEVEL
@@ -69,20 +69,20 @@ spec:
         - name: CORE_PEER_MSPCONFIGPATH
           value: /etc/hyperledger/msp/peer/
         - name: CORE_PEER_ADDRESS
-          value: peer0.brand1.com:7051
+          value: peer0.brand2.com:7051
         - name: CORE_LEDGER_STATE_STATEDATABASE
           value: CouchDB
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
-          value: tracelabel-couchdb:5984
+          value: brand-2-couchdb:5984
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
           valueFrom:
                 secretKeyRef:
-                  name: brand-1-peer-db
+                  name: brand-2-peer-db
                   key: user
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
           valueFrom:
                 secretKeyRef:
-                  name: brand-1-peer-db
+                  name: brand-2-peer-db
                   key: password
         ports:
         - containerPort: 7051
@@ -101,26 +101,26 @@ spec:
       volumes:
       - name: msp
         secret:
-          secretName: brand-1-peer-msp
+          secretName: brand-2-peer-msp
           items:
-          - key: peer0.tracelabel.com-cert.pem
-            path: signcerts/peer0.brand1.com-cert.pem
-          - key: 7dc60b88d647a14d02ad312154a4710a7823d52d6c7e429ecd801ec59e54a3a3_sk
-            path: keystore/7dc60b88d647a14d02ad312154a4710a7823d52d6c7e429ecd801ec59e54a3a3_sk
-          - key: ca.brand1.com-cert.pem
-            path: cacerts/ca.brand1.com-cert.pem
-          - key: tlsca.brand1.com-cert.pem
-            path: tlscacerts/tlsca.brand1.com-cert.pem
+          - key: sign_cert
+            path: signcerts/sign_cert
+          - key: private_key
+            path: keystore/private_key
+          - key: ca.brand2.com-cert.pem
+            path: cacerts/ca.brand2.com-cert.pem
+          - key: tlsca.brand2.com-cert.pem
+            path: tlscacerts/tlsca.brand2.com-cert.pem
           - key: admin_cert
-            path: admincerts/Admin@brand1.com-cert.pem
+            path: admincerts/admin_cert
       - name: users
         secret:
-          secretName: tracelabel-peer-users
+          secretName: brand-2-peer-users
           items:
           - key: ca_cert
-            path: msp/cacerts/ca.brand1.com-cert.pem
+            path: msp/cacerts/ca_cert
           - key: admin_cert
-            path: msp/admincerts/Admin@brand1.com-cert.pem
+            path: msp/admincerts/admin_cert
       - name: dockersocket
         hostPath:
           path: /var/run/docker.sock

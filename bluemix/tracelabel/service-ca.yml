@@ -18,39 +18,7 @@ spec:
     node: ca
     tier: middle
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tracelabel-ca-pv-claim
-  labels:
-    app: tracelabel
-    org: tracelabel
-    node: ca
-    tier: middle
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100M
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tracelabel-ca-pv-claim2
-  labels:
-    app: tracelabel
-    org: tracelabel
-    node: ca
-    tier: middle
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100M
 ---
 apiVersion: apps/v1beta1 # for versions before 1.8.0 use apps/v1beta1
 kind: Deployment

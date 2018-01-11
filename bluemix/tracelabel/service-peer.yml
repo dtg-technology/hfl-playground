@@ -51,7 +51,7 @@ spec:
         tier: middle
     spec:
       containers:
-      - image: registry.au-syd.bluemix.net/tracelabel/fabric-peer:latest
+      - image: registry.eu-de.bluemix.net/hyperledger/fabric-peer:latest
         name: fabric-peer
         env:
         - name: CORE_VM_ENDPOINT
@@ -62,9 +62,7 @@ spec:
           value: debug
         - name: CORE_CHAINCODE_LOGGING_LEVEL
           value: debug
-        - name: CORE_PEER_LOCALMSPID
-          value: TraceLabelMSP
-        - name: oER_GENERAL_LOCALMSPID
+        - name: CORE_PEER_GENERAL_LOCALMSPID
           value: TraceLabelMSP
         - name: CORE_PEER_MSPCONFIGPATH
           value: /etc/hyperledger/msp/peer/
@@ -76,14 +74,14 @@ spec:
           value: tracelabel-couchdb:5984
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
           valueFrom:
-                secretKeyRef:
-                  name: tracelabel-peer-db
-                  key: user
+            secretKeyRef:
+                name: tracelabel-peer-db
+                key: user
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
           valueFrom:
-                secretKeyRef:
-                  name: tracelabel-peer-db
-                  key: password
+            secretKeyRef:
+              name: tracelabel-peer-db
+              key: password
         ports:
         - containerPort: 7051
           name: listen
@@ -105,8 +103,8 @@ spec:
           items:
           - key: peer0.tracelabel.com-cert.pem
             path: signcerts/peer0.tracelabel.com-cert.pem
-          - key: 7dc60b88d647a14d02ad312154a4710a7823d52d6c7e429ecd801ec59e54a3a3_sk
-            path: keystore/7dc60b88d647a14d02ad312154a4710a7823d52d6c7e429ecd801ec59e54a3a3_sk
+          - key: ef9601d872407477200476829021db50dd20c37a6910f730deb1292ce952becd_sk
+            path: keystore/ef9601d872407477200476829021db50dd20c37a6910f730deb1292ce952becd_sk
           - key: ca.tracelabel.com-cert.pem
             path: cacerts/ca.tracelabel.com-cert.pem
           - key: tlsca.tracelabel.com-cert.pem

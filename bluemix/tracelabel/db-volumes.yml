@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: tracelabel-ca-pv-0
+  name: tracelabel-db-pv
   labels:
     type: local
 spec:
@@ -11,21 +11,21 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
   hostPath:
-    path: /tmp/data/pv-0
-
+    path: /tmp/data/tracelabel-db-pv
+    
 ---
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  name: tracelabel-ca-pv-1
+  name: tracelabel-db-pv-claim
   labels:
-    type: local
+    app: tracelabel
+    org: tracelabel
+    node: peer
+    tier: db
 spec:
-  capacity:
-    storage: 100M
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Recycle
-  hostPath:
-    path: /tmp/data/pv-0
-
+  resources:
+    requests:
+      storage: 1G
