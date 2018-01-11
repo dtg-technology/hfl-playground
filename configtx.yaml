@@ -68,6 +68,7 @@ Organizations:
 
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: crypto-config/ordererOrganizations/tracelabel.com/msp
+        AdminPrincipal: Role.ADMIN
 
     - &Brand1
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -78,7 +79,7 @@ Organizations:
         ID: Brand1MSP
 
         MSPDir: crypto-config/peerOrganizations/brand1.com/msp
-
+        AdminPrincipal: Role.ADMIN
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
@@ -95,13 +96,14 @@ Organizations:
         ID: Brand2MSP
 
         MSPDir: crypto-config/peerOrganizations/brand2.com/msp
-
+        AdminPrincipal: Role.ADMIN
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
             - Host: peer0.brand2.com
               Port: 7051
+
 
     - &Distributors
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -112,13 +114,14 @@ Organizations:
         ID: DistributorsMSP
 
         MSPDir: crypto-config/peerOrganizations/distributors.com/msp
-
+        AdminPrincipal: Role.ADMIN
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
             - Host: peer0.distributors.com
               Port: 7051
+
 
     - &Distributor1
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -129,13 +132,14 @@ Organizations:
         ID: Distributor1MSP
 
         MSPDir: crypto-config/peerOrganizations/distributor1.com/msp
-
+        AdminPrincipal: Role.ADMIN
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
             - Host: peer0.distributors.com
               Port: 7051
+
 
     - &Distributor2
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -146,10 +150,11 @@ Organizations:
         ID: Distributor2MSP
 
         MSPDir: crypto-config/peerOrganizations/distributor2.com/msp
-
+        AdminPrincipal: Role.ADMIN
         AnchorPeers:
             - Host: peer0.distributors.com
               Port: 7051
+
 ################################################################################
 #
 #   SECTION: Orderer
