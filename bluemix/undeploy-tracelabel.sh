@@ -21,3 +21,5 @@ kubectl delete -f ${BRAND_SHORT}/service-ca.yml
 kubectl delete -f ${BRAND_SHORT}/ca-volumes.yml
 kubectl delete -f ${BRAND_SHORT}/db-volumes.yml
 kubectl delete -f ${BRAND_SHORT}/service-cli.yml
+
+kubectl delete configmap chaincode

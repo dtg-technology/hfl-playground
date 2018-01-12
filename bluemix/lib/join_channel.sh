@@ -14,11 +14,13 @@ if [ "$DOMAIN" == "TraceLabel" ]; then
 fi
 echo "${msg_sub}-----> Joining channel '$CHANNEL' by '$ORG's peer0.${reset}"
 
-#docker exec -e "CORE_PEER_LOCALMSPID=${ORG}MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@${DOMAIN,}.com/msp" peer0.${DOMAIN,}.com peer channel fetch config $CHANNEL.block -o $ORDERER -c $CHANNEL
 POD=$(kubectl get pod -l org=${ORG,} | grep peer | gawk -e 'BEGIN { FS = " ";} { print $1; }')
-kubectl exec $POD -i -- bash << END
-CORE_PEER_LOCALMSPID=${ORG}MSP
-CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/admin/msp
+
+
+kubectl exec $POD -i -- bash -x << END
+export CORE_PEER_LOCALMSPID=${ORG}MSP
+export CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/admin/msp
+peer channel fetch config $CHANNEL.block -o $ORDERER -c $CHANNEL
 peer channel join -b $CHANNEL.block
 END
 

@@ -15,16 +15,12 @@ if [ "$ORG" == "TraceLabel" ]; then
 fi
 
 if [ "$ORG" != "Distributors"  ] || [ -z "$TL_DEPLOYED" ]; then
-#    docker exec -e "CORE_PEER_ADDRESS=peer0.${DOMAIN,}.com:7051" -e "CORE_PEER_LOCALMSPID=${ORG}MSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${DOMAIN,}.com/users/Admin@${DOMAIN,}.com/msp" cli peer chaincode install -n $CHAINCODE -v 1.0 -p github.com/$CHAINCODE
 
-POD=$(kubectl get pod -l org=tracelabel | grep cli | gawk -e 'BEGIN { FS = " ";} { print $1; }')
-echo $POD
-kubectl exec $POD -it -- bash -x << END
-CORE_PEER_ADDRESS=${DOMAIN,}-peer:7051
-echo $CORE_PEER_ADDRESS
-CORE_PEER_LOCALMSPID=${ORG}MSP
-CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/admin/msp
-CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${DOMAIN,}.com/users/Admin@${DOMAIN,}.com/msp
+    POD=$(kubectl get pod -l org=tracelabel | grep cli | gawk -e 'BEGIN { FS = " ";} { print $1; }')
+    kubectl exec $POD -it -- bash -x << END
+export CORE_PEER_ADDRESS=${DOMAIN,}-peer:7051
+export CORE_PEER_LOCALMSPID=${ORG}MSP
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${DOMAIN,}.com/users/Admin@${DOMAIN,}.com/msp
 peer chaincode install -n $CHAINCODE -v 1.0 -p github.com/$CHAINCODE
 END
     if [ "$ORG" == "Distributors" ]; then

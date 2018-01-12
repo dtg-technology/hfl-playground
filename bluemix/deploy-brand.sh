@@ -27,7 +27,6 @@ CA_PRIVATE_KEY=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca
 PEER_PRIVATE_KEY=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/peers/peer0.${BRAND_SHORT}.com/msp/keystore | grep _sk)
 PEER_SIGN_CERT=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/peers/peer0.${BRAND_SHORT}.com/msp/signcerts | grep pem)
 ADMIN_PRIVATE_KEY=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/keystore | grep _sk)
-echo Admin key is $ADMIN_PRIVATE_KEY
 
 #### Deploying CA
 echo "${msg_sub}-----> deploying CA${reset}"
@@ -39,7 +38,7 @@ if [ $? -eq 1 ]; then
    kubectl create secret generic ${RES_NAME}  --from-file=ca-key.pem=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca/$CA_PRIVATE_KEY \
                                               --from-file=ca-cert.pem=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca/ca.${BRAND_SHORT}.com-cert.pem \
                                               --from-file=fabric-ca-server-config.yaml=../resource/brand1-fabric-ca-server-config.yaml
-
+   kubectl label secret ${RES_NAME} app=tracelabel
 else
    echo "--------> exists${reset}"
 fi
@@ -52,6 +51,7 @@ if [ $? -eq 1 ]; then
   echo "--------> creating secret '${RES_NAME}'${reset}"
   kubectl create secret generic ${RES_NAME}  --from-file=admin-cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/msp/admincerts/Admin@${BRAND_SHORT}.com-cert.pem \
                                              --from-file=ca-cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/msp/cacerts/ca.${BRAND_SHORT}.com-cert.pem
+   kubectl label secret ${RES_NAME} app=tracelabel
 else
    echo "--------> exists${reset}"
 fi
@@ -70,6 +70,7 @@ $(kubectl get secret ${RES_NAME} > /dev/null 2>&1 )
 if [ $? -eq 1 ]; then
    echo "--------> creating secret '${RES_NAME}'${reset}"
    kubectl create secret generic ${RES_NAME} --from-file=user=${CONFIG}/.db.username --from-file=password=${CONFIG}/.db.password
+   kubectl label secret ${RES_NAME} app=tracelabel
 else
    echo "--------> exists${reset}"
 fi
@@ -86,6 +87,7 @@ if [ $? -eq 1 ]; then
                                             --from-file=private_key=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/peers/peer0.${BRAND_SHORT}.com/msp/keystore/$PEER_PRIVATE_KEY \
                                             --from-file=sign_cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/peers/peer0.${BRAND_SHORT}.com/msp/signcerts/$PEER_SIGN_CERT \
                                             --from-file=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/peers/peer0.${BRAND_SHORT}.com/msp/tlscacerts
+   kubectl label secret ${RES_NAME} app=tracelabel
 else
    echo "--------> exists${reset}"
 fi
@@ -100,6 +102,7 @@ if [ $? -eq 1 ]; then
                                             --from-file=ca_cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/cacerts/ca.${BRAND_SHORT}.com-cert.pem \
                                             --from-file=sign_cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/signcerts/Admin@${BRAND_SHORT}.com-cert.pem \
                                             --from-file=sign_key=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/keystore/$ADMIN_PRIVATE_KEY
+   kubectl label secret ${RES_NAME} app=tracelabel
 else
    echo "--------> exists${reset}"
 fi
@@ -110,6 +113,7 @@ $(kubectl get secret ${RES_NAME} > /dev/null 2>&1 )
 if [ $? -eq 1 ]; then
    echo "--------> creating secret '${RES_NAME}'${reset}"
    kubectl create secret generic ${RES_NAME} --from-file=../config
+   kubectl label secret ${RES_NAME} app=tracelabel
    echo "--------> exists${reset}"
 fi
 

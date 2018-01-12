@@ -76,8 +76,15 @@ spec:
         volumeMounts:
         - name: brand1-admin
           mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/brand1.com/users/Admin@brand1.com/msp
+        - name: brand2-admin
+          mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/brand2.com/users/Admin@brand2.com/msp
+        - name: distributors-admin
+          mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/distributors.com/users/Admin@distributors.com/msp
+
         - name: dockersocket
           mountPath: /host/var/run/docker.sock
+        - name: chaincode
+          mountPath: /opt/gopath/src/github.com/fabcar
       volumes:
       - name: brand1-admin
         secret:
@@ -91,6 +98,35 @@ spec:
             path: cacerts/ca-cert.pem
           - key: admin_cert
             path: admincerts/admin_cert.pem
+      - name: brand2-admin
+        secret:
+          secretName: brand2-peer-users
+          items:
+          - key: sign_cert
+            path: signcerts/sign_cert.pem
+          - key: sign_key
+            path: keystore/sign_key
+          - key: ca_cert
+            path: cacerts/ca-cert.pem
+          - key: admin_cert
+            path: admincerts/admin_cert.pem
+      - name: distributors-admin
+        secret:
+          secretName: distributors-peer-users
+          items:
+          - key: admin_cert
+            path: signcerts/sign_cert.pem
+          - key: sign_key
+            path: keystore/sign_key
+          - key: ca_cert
+            path: cacerts/ca-cert.pem
+          - key: admin_cert
+            path: admincerts/admin_cert.pem
+          - key: int_ca_cert
+            path: intermediatecerts/int_ca_cert.pem
+      - name: chaincode
+        configMap:
+          name: chaincode
       - name: dockersocket
         hostPath:
           path: /var/run/docker.sock

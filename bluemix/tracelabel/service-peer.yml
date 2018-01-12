@@ -67,7 +67,7 @@ spec:
         - name: CORE_PEER_MSPCONFIGPATH
           value: /etc/hyperledger/msp/peer/
         - name: CORE_PEER_ADDRESS
-          value: peer0.tracelabel.com:7051
+          value: tracelabel-peer:7051
         - name: CORE_LEDGER_STATE_STATEDATABASE
           value: CouchDB
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
@@ -103,8 +103,8 @@ spec:
           items:
           - key: peer0.tracelabel.com-cert.pem
             path: signcerts/peer0.tracelabel.com-cert.pem
-          - key: ef9601d872407477200476829021db50dd20c37a6910f730deb1292ce952becd_sk
-            path: keystore/ef9601d872407477200476829021db50dd20c37a6910f730deb1292ce952becd_sk
+          - key: sign_key
+            path: keystore/sign_key
           - key: ca.tracelabel.com-cert.pem
             path: cacerts/ca.tracelabel.com-cert.pem
           - key: tlsca.tracelabel.com-cert.pem

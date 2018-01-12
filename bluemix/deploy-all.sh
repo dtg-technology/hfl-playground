@@ -12,7 +12,12 @@ echo "${msg}===> Starting nodes on Bluemix.${reset}"
 ./deploy-tracelabel.sh
 ./deploy-brand.sh brand1
 ./deploy-brand.sh brand2
+./deploy-distributors.sh
+kubectl apply  -f tracelabel/service-cli.yml
+
 echo "${msg}===> Nodes started.${reset}"
+
+
 
 kubectl get pods -L org -L org
 . ./lib/set_bluemix_env.sh

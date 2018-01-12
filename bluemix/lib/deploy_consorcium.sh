@@ -17,16 +17,17 @@ ORG2=$5
 echo "${msg}===> Deploying ${CONSORCIUM}.${reset}"
 . ./lib/create_channel.sh $CHANNEL $ORG1
 . ./lib/join_channel.sh $CHANNEL $ORG1
+
 # deploy chaincode on peer
 . ./lib/deploy_chaincode.sh $CHAINCODE $ORG1
+
 # deploy chaincode on peer
-#if [ "$ORG2" == "Org3" ]; then
-    . deploy_chaincode.sh $CHAINCODE $ORG2
-#fi
-. join_channel.sh $CHANNEL $ORG2
+sleep 10
+. ./lib/deploy_chaincode.sh $CHAINCODE $ORG2
+. ./lib/join_channel.sh $CHANNEL $ORG2
 
 # isntantiate to channel
-. instantiate_chaincode.sh $CHAINCODE $CHANNEL $ORG1 "OR ('${ORG1}MSP.member','${ORG2}MSP.member')"
+. ./lib/instantiate_chaincode.sh $CHAINCODE $CHANNEL $ORG1 "OR ('${ORG1}MSP.member','${ORG2}MSP.member')"
 # populate with initial data
 . init_chaincode.sh $CHAINCODE $CHANNEL $ORG1
 

@@ -58,19 +58,19 @@ spec:
         - name: CORE_VM_ENDPOINT
           value: unix:///host/var/run/docker.sock
         - name: CORE_PEER_ID
-          value: brand2-peer
+          value: peer0.brand2.com
         - name: CORE_LOGGING_PEER
           value: debug
         - name: CORE_CHAINCODE_LOGGING_LEVEL
           value: debug
         - name: CORE_PEER_LOCALMSPID
           value: Brand2MSP
-        - name: CORE_PEER_GENERAL_LOCALMSPID
-          value: Brand2MSP
         - name: CORE_PEER_MSPCONFIGPATH
           value: /etc/hyperledger/msp/peer/
         - name: CORE_PEER_ADDRESS
           value: brand2-peer:7051
+        - name: CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE
+          value: host
         - name: CORE_LEDGER_STATE_STATEDATABASE
           value: CouchDB
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
@@ -108,7 +108,7 @@ spec:
           secretName: brand2-peer-msp
           items:
           - key: sign_cert
-            path: signcerts/sign_cert
+            path: signcerts/peer0.brand2.com-cert.pem
           - key: private_key
             path: keystore/private_key
           - key: ca.brand2.com-cert.pem
@@ -122,9 +122,13 @@ spec:
           secretName: brand2-peer-users
           items:
           - key: ca_cert
-            path: msp/cacerts/ca_cert
+            path: admin/msp/cacerts/ca_cert
           - key: admin_cert
-            path: msp/admincerts/admin_cert
+            path: admin/msp/admincerts/admin_cert
+          - key: sign_cert
+            path: admin/msp/signcerts/sign_cert
+          - key: sign_key
+            path: admin/msp/keystore/sign_key
       - name: config
         secret:
           secretName: fabric-config

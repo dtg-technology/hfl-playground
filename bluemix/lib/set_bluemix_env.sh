@@ -13,5 +13,7 @@ output=$(kubectl get svc -l org=tracelabel | grep orderer)
 ORDERER_IP=$(echo "$output" | gawk -e 'BEGIN { FS = " "; } { print  $2 ; }')
 ORDERER_PORT=$(echo "$output" | gawk -e 'BEGIN { FS = " "; } { print  $4 ; }' | sed -ne "s/^\(.*\):.*$/\1/p")
 ORDERER=$ORDERER_IP:$ORDERER_PORT
-ORDERER=orderer:$ORDERER_PORT
+export ORDERER=orderer:$ORDERER_PORT
 echo orderer: $ORDERER
+
+CLI_POD=$(kubectl get pods -l org=tracelabel -o=custom-columns=:.metadata.name | grep cli )

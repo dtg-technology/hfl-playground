@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: distributors-couchdb
+  labels:
+    app: tracelabel
+    org: distributors
+    node: peer
+    tier: db
+spec:
+  type: NodePort
+  ports:
+    - port: 5984
+      nodePort: 30988
+  selector:
+    app: tracelabel
+    org: distributors
+    node: peer
+    tier: db
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: distributors-db-pv-claim
+  labels:
+    app: tracelabel
+    org: distributors
+    node: peer
+    tier: db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1G
+---
+apiVersion: apps/v1beta1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: couchdb
+  labels:
+    app: tracelabel
+    org: distributors
+    node: peer
+    tier: db
+spec:
+  selector:
+    matchLabels:
+      app: tracelabel
+      org: distributors
+      node: peer
+      tier: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tracelabel
+        org: distributors
+        node: peer
+        tier: db
+    spec:
+      containers:
+      - image: registry.eu-de.bluemix.net/hyperledger/fabric-couchdb:latest
+        name: couchdb
+        env:
+        - name: COUCHDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: distributors-peer-db
+              key: user
+        - name: COUCHDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: distributors-peer-db
+              key: password
+        ports:
+        - containerPort: 5984
+          name:
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /usr/local/var/lib/couchdb
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: distributors-db-pv-claim
