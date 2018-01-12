@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: brand-1-ca
+  name: brand1-ca
   labels:
     app: tracelabel
-    org: brand-1
+    org: brand1
     node: ca
     tier: middle
 spec:
@@ -14,7 +14,7 @@ spec:
       nodePort: 30064
   selector:
     app: tracelabel
-    org: brand-1
+    org: brand1
     node: ca
     tier: middle
 
@@ -25,14 +25,14 @@ metadata:
   name: ca
   labels:
     app: tracelabel
-    org: brand-1
+    org: brand1
     node: ca
     tier: middle
 spec:
   selector:
     matchLabels:
       app: tracelabel
-      org: brand-1
+      org: brand1
       node: ca
       tier: middle
   strategy:
@@ -41,7 +41,7 @@ spec:
     metadata:
       labels:
         app: tracelabel
-        org: brand-1
+        org: brand1
         node: ca
         tier: middle
     spec:
@@ -67,4 +67,4 @@ spec:
       volumes:
       - name: msp
         secret:
-          secretName: brand-1-ca
+          secretName: brand1-ca

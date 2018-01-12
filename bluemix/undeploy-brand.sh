@@ -3,7 +3,7 @@
 if [ $# -lt 1 ]; then
    echo -e "brand argument is not specified.\nexiting.\n"
    exit
-elif [ "$1" != "brand-1" ] && [ "$1" != "brand-2" ]; then
+elif [ "$1" != "brand1" ] && [ "$1" != "brand2" ]; then
    echo -e "argument must be \"brand-(1,2)\".\nexiting.\n"
    exit
 fi
@@ -23,4 +23,5 @@ BRAND_SHORT=$(echo $BRAND | tr -d "-")
 kubectl delete -f ${BRAND}/service-peer.yml
 kubectl delete -f ${BRAND}/service-couchdb.yml
 kubectl delete -f ${BRAND}/service-ca.yml
-#kubectl delete -f ${BRAND_SHORT}/ca-volumes.yml
+kubectl delete -f ${BRAND_SHORT}/volumes.yml
+

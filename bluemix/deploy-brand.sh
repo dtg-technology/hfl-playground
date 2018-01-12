@@ -3,7 +3,7 @@
 if [ $# -lt 1 ]; then
    echo -e "brand argument is not specified.\nexiting.\n"
    exit
-elif [ "$1" != "brand-1" ] && [ "$1" != "brand-2" ]; then
+elif [ "$1" != "brand1" ] && [ "$1" != "brand2" ]; then
    echo -e "argument must be \"brand-(1,2)\".\nexiting.\n"
    exit
 fi
@@ -26,7 +26,8 @@ echo "${msg}===> Deploying ${BRAND} to Bluemix.${reset}"
 CA_PRIVATE_KEY=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/ca | grep _sk)
 PEER_PRIVATE_KEY=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/peers/peer0.${BRAND_SHORT}.com/msp/keystore | grep _sk)
 PEER_SIGN_CERT=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/peers/peer0.${BRAND_SHORT}.com/msp/signcerts | grep pem)
-
+ADMIN_PRIVATE_KEY=$(ls -f1 ../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/keystore | grep _sk)
+echo Admin key is $ADMIN_PRIVATE_KEY
 
 #### Deploying CA
 echo "${msg_sub}-----> deploying CA${reset}"
@@ -96,8 +97,19 @@ if [ $? -eq 1 ]; then
    echo "--------> creating secret '${RES_NAME}'${reset}"
    kubectl create secret generic ${RES_NAME}   \
                                             --from-file=admin_cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/admincerts/Admin@${BRAND_SHORT}.com-cert.pem \
-                                            --from-file=ca_cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/cacerts/ca.${BRAND_SHORT}.com-cert.pem
+                                            --from-file=ca_cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/cacerts/ca.${BRAND_SHORT}.com-cert.pem \
+                                            --from-file=sign_cert=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/signcerts/Admin@${BRAND_SHORT}.com-cert.pem \
+                                            --from-file=sign_key=../crypto-config/peerOrganizations/${BRAND_SHORT}.com/users/Admin@${BRAND_SHORT}.com/msp/keystore/$ADMIN_PRIVATE_KEY
 else
+   echo "--------> exists${reset}"
+fi
+
+RES_NAME=fabric-config
+echo "--------> checking secret '${RES_NAME}'${reset}"
+$(kubectl get secret ${RES_NAME} > /dev/null 2>&1 )
+if [ $? -eq 1 ]; then
+   echo "--------> creating secret '${RES_NAME}'${reset}"
+   kubectl create secret generic ${RES_NAME} --from-file=../config
    echo "--------> exists${reset}"
 fi
 
@@ -110,4 +122,4 @@ kubectl apply -f ${CONFIG}/service-peer.yml
 
 echo "${msg}===> ${BRAND} deployed to Bluemix.${reset}"
 
-kubectl get pods -l org=${BRAND}
+kubectl get pods -l org=${BRAND} -L org

@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: brand-2-couchdb
+  name: brand2-couchdb
   labels:
     app: tracelabel
-    org: brand-2
+    org: brand2
     node: peer
     tier: db
 spec:
@@ -14,7 +14,7 @@ spec:
       nodePort: 30986
   selector:
     app: tracelabel
-    org: brand-2
+    org: brand2
     node: peer
     tier: db
 
@@ -23,10 +23,10 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: brand-2-db-pv-claim
+  name: brand2-db-pv-claim
   labels:
     app: tracelabel
-    org: brand-2
+    org: brand2
     node: peer
     tier: db
 spec:
@@ -42,14 +42,14 @@ metadata:
   name: couchdb
   labels:
     app: tracelabel
-    org: brand-2
+    org: brand2
     node: peer
     tier: db
 spec:
   selector:
     matchLabels:
       app: tracelabel
-      org: brand-2
+      org: brand2
       node: peer
       tier: db
   strategy:
@@ -58,7 +58,7 @@ spec:
     metadata:
       labels:
         app: tracelabel
-        org: brand-2
+        org: brand2
         node: peer
         tier: db
     spec:
@@ -69,12 +69,12 @@ spec:
         - name: COUCHDB_USER
           valueFrom:
             secretKeyRef:
-              name: brand-2-peer-db
+              name: brand2-peer-db
               key: user
         - name: COUCHDB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: brand-2-peer-db
+              name: brand2-peer-db
               key: password
         ports:
         - containerPort: 5984
@@ -85,4 +85,4 @@ spec:
       volumes:
       - name: persistent-storage
         persistentVolumeClaim:
-          claimName: brand-2-db-pv-claim
+          claimName: brand2-db-pv-claim

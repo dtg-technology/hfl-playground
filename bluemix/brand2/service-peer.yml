@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: brand-2-peer
+  name: brand2-peer
   labels:
     app: tracelabel
-    org: brand-2
+    org: brand2
     node: peer
     tier: middle
 spec:
@@ -18,7 +18,7 @@ spec:
       nodePort: 30073
   selector:
     app: tracelabel
-    org: brand-2
+    org: brand2
     node: peer
     tier: middle
 
@@ -30,14 +30,14 @@ metadata:
   name: peer
   labels:
     app: tracelabel
-    org: brand-2
+    org: brand2
     node: peer
     tier: middle
 spec:
   selector:
     matchLabels:
       app: tracelabel
-      org: brand-2
+      org: brand2
       node: peer
       tier: middle
   strategy:
@@ -46,43 +46,44 @@ spec:
     metadata:
       labels:
         app: tracelabel
-        org: brand-2
+        org: brand2
         node: peer
         tier: middle
     spec:
       containers:
       - image: registry.eu-de.bluemix.net/hyperledger/fabric-peer:latest
         name: fabric-peer
+        workingDir: /opt/gopath/src/github.com/hyperledger/fabric
         env:
         - name: CORE_VM_ENDPOINT
           value: unix:///host/var/run/docker.sock
         - name: CORE_PEER_ID
-          value: peer0.brand2.com
+          value: brand2-peer
         - name: CORE_LOGGING_PEER
           value: debug
         - name: CORE_CHAINCODE_LOGGING_LEVEL
           value: debug
         - name: CORE_PEER_LOCALMSPID
-          value: TraceLabelMSP
-        - name: oER_GENERAL_LOCALMSPID
-          value: TraceLabelMSP
+          value: Brand2MSP
+        - name: CORE_PEER_GENERAL_LOCALMSPID
+          value: Brand2MSP
         - name: CORE_PEER_MSPCONFIGPATH
           value: /etc/hyperledger/msp/peer/
         - name: CORE_PEER_ADDRESS
-          value: peer0.brand2.com:7051
+          value: brand2-peer:7051
         - name: CORE_LEDGER_STATE_STATEDATABASE
           value: CouchDB
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
-          value: brand-2-couchdb:5984
+          value: brand2-couchdb:5984
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
           valueFrom:
                 secretKeyRef:
-                  name: brand-2-peer-db
+                  name: brand2-peer-db
                   key: user
         - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
           valueFrom:
                 secretKeyRef:
-                  name: brand-2-peer-db
+                  name: brand2-peer-db
                   key: password
         ports:
         - containerPort: 7051
@@ -96,12 +97,15 @@ spec:
         - name: users
           mountPath: /etc/hyperledger/msp/users
           readOnly: true
+        - name: config
+          mountPath: /etc/hyperledger/configtx
+          readOnly: true
         - name: dockersocket
           mountPath: /host/var/run/docker.sock
       volumes:
       - name: msp
         secret:
-          secretName: brand-2-peer-msp
+          secretName: brand2-peer-msp
           items:
           - key: sign_cert
             path: signcerts/sign_cert
@@ -115,12 +119,15 @@ spec:
             path: admincerts/admin_cert
       - name: users
         secret:
-          secretName: brand-2-peer-users
+          secretName: brand2-peer-users
           items:
           - key: ca_cert
             path: msp/cacerts/ca_cert
           - key: admin_cert
             path: msp/admincerts/admin_cert
+      - name: config
+        secret:
+          secretName: fabric-config
       - name: dockersocket
         hostPath:
           path: /var/run/docker.sock

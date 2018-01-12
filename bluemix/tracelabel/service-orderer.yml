@@ -80,10 +80,10 @@ spec:
         secret:
           secretName: tracelabel-orderer-msp
           items:
-          - key: orderer.tracelabel.com-cert.pem
-            path: msp/signcerts/orderer.tracelabel.com-cert.pem
-          - key: 763db9157ba0cc00cad8b950e02167be58f00b22878136fb55851175c7f16b0e_sk
-            path: msp/keystore/763db9157ba0cc00cad8b950e02167be58f00b22878136fb55851175c7f16b0e_sk
+          - key: sign_cert
+            path: msp/signcerts/sign_cert.pem
+          - key: sign_key
+            path: msp/keystore/sign_key
           - key: ca.tracelabel.com-cert.pem
             path: msp/cacerts/ca.tracelabel.com-cert.pem
           - key: tlsca.tracelabel.com-cert.pem

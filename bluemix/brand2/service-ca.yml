@@ -1,21 +1,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracelabel-ca
+  name: brand2-ca
   labels:
     app: tracelabel
-    org: tracelabel
+    org: brand2
     node: ca
     tier: middle
 spec:
+  type: NodePort
   ports:
-    - port: 5984
+    - port: 7054
+      nodePort: 30074
   selector:
     app: tracelabel
-    org: tracelabel
+    org: brand2
     node: ca
     tier: middle
-  clusterIP: None
 
 ---
 apiVersion: apps/v1beta1 # for versions before 1.8.0 use apps/v1beta1
@@ -24,14 +25,14 @@ metadata:
   name: ca
   labels:
     app: tracelabel
-    org: tracelabel
+    org: brand2
     node: ca
     tier: middle
 spec:
   selector:
     matchLabels:
       app: tracelabel
-      org: tracelabel
+      org: brand2
       node: ca
       tier: middle
   strategy:
@@ -40,30 +41,30 @@ spec:
     metadata:
       labels:
         app: tracelabel
-        org: tracelabel
+        org: brand2
         node: ca
         tier: middle
     spec:
       containers:
-      - image: registry.au-syd.bluemix.net/tlabel/fabric-ca:latest
+      - image: registry.eu-de.bluemix.net/hyperledger/fabric-ca:latest
         name: fabric-ca
         env:
         - name: FABRIC_CA_HOME
           value: /etc/hyperledger/fabric-ca-server
         - name: FABRIC_CA_SERVER_CA_NAME
-          value: ca.tracelabel.com
+          value: ca.brand2.com
         - name: FABRIC_CA_SERVER_CA_CERTFILE
-          value: /etc/hyperledger/fabric-ca-server-config/ca.tracelabel.com-cert.pem
+          value: /etc/hyperledger/fabric-ca-server-config/ca-cert.pem
         - name: FABRIC_CA_SERVER_CA_KEYFILE
-          value: /etc/hyperledger/fabric-ca-server-config/528302063e6bc713d8be304cca0e3db766cc8aa9f0a966c4f99735cae94bec7e_sk
+          value: /etc/hyperledger/fabric-ca-server-config/ca-key.pem
         ports:
         - containerPort: 7054
           name: ca
         volumeMounts:
-        - name: ca-msp
+        - name: msp
           mountPath: /etc/hyperledger/fabric-ca-server-config
           readOnly: true
       volumes:
-      - name: ca-msp
+      - name: msp
         secret:
-          secretName: tracelabel-ca
+          secretName: brand2-ca

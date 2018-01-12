@@ -18,4 +18,6 @@ kubectl delete -f ${BRAND_SHORT}/service-peer.yml
 kubectl delete -f ${BRAND_SHORT}/service-couchdb.yml
 kubectl delete -f ${BRAND_SHORT}/service-orderer.yml
 kubectl delete -f ${BRAND_SHORT}/service-ca.yml
-#kubectl delete -f ${BRAND_SHORT}/ca-volumes.yml
+kubectl delete -f ${BRAND_SHORT}/ca-volumes.yml
+kubectl delete -f ${BRAND_SHORT}/db-volumes.yml
+kubectl delete -f ${BRAND_SHORT}/service-cli.yml

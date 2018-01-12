@@ -107,11 +107,14 @@ echo "--------> checking secret '${RES_NAME}'${reset}"
 $(kubectl get secret ${RES_NAME} > /dev/null 2>&1 )
 if [ $? -eq 1 ]; then
    echo "--------> creating secret '${RES_NAME}'${reset}"
+   ORDERER_SIGN_CERT=$(ls -f1 ../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/signcerts | grep pem)
+   ORDERER_SIGN_KEY=$(ls -f1 ../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/keystore | grep _sk)
+
    kubectl create secret generic ${RES_NAME}    \
                                             --from-file=admin_cert=../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/admincerts/Admin@${BRAND_SHORT}.com-cert.pem \
                                             --from-file=../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/cacerts \
-                                            --from-file=../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/keystore \
-                                            --from-file=../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/signcerts \
+                                            --from-file=sign_key=../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/keystore/$ORDERER_SIGN_KEY \
+                                            --from-file=sign_cert=../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/signcerts/$ORDERER_SIGN_CERT \
                                             --from-file=../crypto-config/ordererOrganizations/${BRAND_SHORT}.com/orderers/orderer.${BRAND_SHORT}.com/msp/tlscacerts
 else
    echo "--------> exists${reset}"
@@ -170,6 +173,7 @@ kubectl apply  -f ${CONFIG}/service-couchdb.yml
 echo "--------> starting peer0${reset}"
 kubectl apply  -f ${CONFIG}/service-peer.yml
 echo "${msg_sub}-----> Peer0 service done${reset}"
+kubectl apply  -f ${CONFIG}/service-cli.yml
 echo "${msg}===> ${BRAND} deplyed to Bluemix.${reset}"
 
-kubectl get pods -l org=tracelabel
+kubectl get pods -l org=tracelabel -L org
