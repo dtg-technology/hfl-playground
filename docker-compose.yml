@@ -10,7 +10,7 @@ networks:
 
 services:
   ca.brand1.com:
-    image: hyperledger/fabric-ca
+    image: ibmblockchain/fabric-ca:1.0.5
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.brand1.com
@@ -27,7 +27,7 @@ services:
       - basic
 
   ca.brand2.com:
-    image: hyperledger/fabric-ca
+    image: ibmblockchain/fabric-ca:1.0.5
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.brand2.com
@@ -44,7 +44,7 @@ services:
       - basic
 
   ca.tracelabel.com:
-    image: hyperledger/fabric-ca
+    image: ibmblockchain/fabric-ca:1.0.5
     container_name: ca.tracelabel.com
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
@@ -79,7 +79,7 @@ services:
       - basic
 
   ca.distr.tracelabel.com:
-    image: hyperledger/fabric-ca
+    image: ibmblockchain/fabric-ca:1.0.5
     container_name: ca.distr.tracelabel.com
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
@@ -105,7 +105,7 @@ services:
 
 
   ca.cli:
-    image: hyperledger/fabric-ca
+    image: ibmblockchain/fabric-ca:1.0.5
     container_name: ca.cli
     tty: true
     command: bash
@@ -131,7 +131,7 @@ services:
 
   orderer.tracelabel.com:
     container_name: orderer.tracelabel.com
-    image: hyperledger/fabric-orderer
+    image: ibmblockchain/fabric-orderer
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -151,7 +151,7 @@ services:
 
   peer0.brand1.com:
     container_name: peer0.brand1.com
-    image: hyperledger/fabric-peer
+    image: ibmblockchain/fabric-peer
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.brand1.com
@@ -190,7 +190,7 @@ services:
 
   peer0.brand2.com:
     container_name: peer0.brand2.com
-    image: hyperledger/fabric-peer
+    image: ibmblockchain/fabric-peer:1.0.5
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.brand2.com
@@ -229,7 +229,7 @@ services:
 
   # peer0.tracelabel.com:
   #   container_name: peer0.tracelabel.com
-  #   image: hyperledger/fabric-peer
+  #   image: ibmblockchain/fabric-peer:1.0.5
   #   environment:
   #     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
   #     - CORE_PEER_ID=peer0.tracelabel.com
@@ -268,7 +268,7 @@ services:
 
   peer0.distributors.com:
     container_name: peer0.distributors.com
-    image: hyperledger/fabric-peer
+    image: ibmblockchain/fabric-peer:1.0.5
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.distr.tracelabel.com
@@ -307,7 +307,7 @@ services:
 
   brand1.couchdb:
     container_name: brand1.couchdb
-    image: hyperledger/fabric-couchdb
+    image: ibmblockchain/fabric-couchdb:1.0.5
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
@@ -320,7 +320,7 @@ services:
 
   brand2.couchdb:
     container_name: brand2.couchdb
-    image: hyperledger/fabric-couchdb
+    image: ibmblockchain/fabric-couchdb:1.0.5
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
@@ -333,7 +333,7 @@ services:
 
   distributors.couchdb:
     container_name: distributors.couchdb
-    image: hyperledger/fabric-couchdb
+    image: ibmblockchain/fabric-couchdb:1.0.5
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
@@ -346,7 +346,7 @@ services:
 
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools
+    image: ibmblockchain/fabric-tools:1.0.5
     tty: true
     environment:
       - GOPATH=/opt/gopath

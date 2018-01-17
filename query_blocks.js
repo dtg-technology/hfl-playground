@@ -107,5 +107,5 @@ Data:
 	console.log(blockText);
 	//for (var p in payload) { console.log(p);}
 }).catch((err) => {
-	console.error('--> !Failed to query successfully :: ' + err);
+	console.error('--> !Failed to query successfully : ' + err);
 });

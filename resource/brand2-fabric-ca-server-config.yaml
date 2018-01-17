@@ -59,8 +59,8 @@ tls:
   # Enable TLS (default: false)
   enabled: false
   # TLS for the server's listening port
-  certfile: ca-cert.pem
-  keyfile: ca-key.pem
+  certfile: ../data/ca-cert.pem
+  keyfile: ../data/ca-key.pem
   clientauth:
     type: noclientcert
     certfiles:
@@ -131,14 +131,14 @@ registry:
 #############################################################################
 db:
   type: sqlite3
-  datasource: fabric-ca-server.db
+  datasource: ../data/fabric-ca-server.db
   tls:
       enabled: false
       certfiles:
-        - db-server-cert.pem
+        - ../data/db-server-cert.pem
       client:
-        certfile: db-client-cert.pem
-        keyfile: db-client-key.pem
+        certfile: ../data/db-client-cert.pem
+        keyfile: ../data/db-client-key.pem
 
 #############################################################################
 #  LDAP section
@@ -157,8 +157,8 @@ ldap:
       certfiles:
         - ldap-server-cert.pem
       client:
-         certfile: ldap-client-cert.pem
-         keyfile: ldap-client-key.pem
+         certfile: ../data/ldap-client-cert.pem
+         keyfile: ../data/ldap-client-key.pem
 
 #############################################################################
 #  Affiliation section
@@ -239,7 +239,7 @@ bccsp:
         security: 256
         filekeystore:
             # The directory used for the software file-based keystore
-            keystore: msp/keystore
+            keystore: ../data/msp/keystore
 
 #############################################################################
 # Multi CA section

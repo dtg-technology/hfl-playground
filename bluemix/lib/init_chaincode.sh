@@ -15,4 +15,11 @@ if [ "$DOMAIN" == "TraceLabel" ]; then
     DOMAIN=tracelabel
 fi
 echo "${msg_sub}-----> Invoking chaincode init fo '$CHAINCODE' in channel '$CHANNEL' of $ORG's peer0.${reset}"
-docker exec -e "CORE_PEER_ADDRESS=peer0.${DOMAIN,}.com:7051" -e "CORE_PEER_LOCALMSPID=${ORG}MSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${DOMAIN,}.com/users/Admin@${DOMAIN,}.com/msp" cli peer chaincode invoke -o $ORDERER -C $CHANNEL -n $CHAINCODE -c '{"function":"initLedger","Args":[""]}'
+
+
+kubectl exec $CLI_POD -it -- bash -x << END
+export CORE_PEER_ADDRESS=${DOMAIN,}-peer:7051
+export CORE_PEER_LOCALMSPID=${ORG}MSP
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${DOMAIN,}.com/users/Admin@${DOMAIN,}.com/msp
+peer chaincode invoke -o $ORDERER -C $CHANNEL -n $CHAINCODE -c '{"function":"initLedger","Args":[""]}'
+END

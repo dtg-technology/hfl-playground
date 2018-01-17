@@ -47,9 +47,11 @@ spec:
         tier: middle
     spec:
       containers:
-      - image: registry.eu-de.bluemix.net/hyperledger/fabric-orderer:latest
+      - image: ibmblockchain/fabric-orderer:1.0.5
         name: fabric-orderer
         env:
+        - name: CORE_PEER_NETWORKID
+          value: nid1
         - name: ORDERER_GENERAL_LOGLEVEL
           value: debug
         - name: ORDERER_GENERAL_LISTENADDRESS

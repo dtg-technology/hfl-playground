@@ -11,6 +11,7 @@ echo "${msg}===> Updating environment.${reset}"
 # if no crypto configuration is generated yet, then just load basic env
 if [ -d ./crypto-config ]; then
 
+
   CA_CRYPTO_DIR=./crypto-config/peerOrganizations/brand1.com/ca
   CA_BRAND1_PRIVATE_KEY=$(ls -f1 ./crypto-config/peerOrganizations/brand1.com/ca | grep _sk)
   CA_BRAND2_PRIVATE_KEY=$(ls -f1 ./crypto-config/peerOrganizations/brand2.com/ca | grep _sk)

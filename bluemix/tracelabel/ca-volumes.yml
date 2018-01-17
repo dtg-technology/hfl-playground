@@ -6,12 +6,12 @@ metadata:
     type: local
 spec:
   capacity:
-    storage: 100M
+    storage: 1G
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
   hostPath:
-    path: /tmp/data/tracelabel-pv
+    path: /tmp/data/tracelabel-ca-pv
     
 ---
 apiVersion: v1
@@ -28,4 +28,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100M
+      storage: 1G

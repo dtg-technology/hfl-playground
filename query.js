@@ -5,6 +5,8 @@ var path = require('path');
 var util = require('util');
 var os = require('os');
 
+
+let [,, cluster, channelName, userOrg, peerOrg] = process.argv;
 //
 var fabric_client = new Fabric_Client();
 // setup the fabric network
@@ -13,36 +15,36 @@ const 	channel_12 = fabric_client.newChannel('channel-1'),
 let config = {
 	brand1: {
 		userOrg: "brand1",
-		url: "grpc://localhost:7051",
+		url: `grpc://${cluster}:30061`,
 		storePath: path.join(__dirname, 'hfc-key-store/brand1')
 	},
 	brand2: {
 		userOrg: "brand2",
-		url: "grpc://localhost:7061",
+		url: `grpc://${cluster}:30071`,
 		storePath: path.join(__dirname, 'hfc-key-store/brand2')
 	},
 	distributor1: {
 		ca_port: 7058,
-		url: 'grpc://localhost:7071',
+		url: `grpc://${cluster}:30081`,
 		storePath: path.join(__dirname, 'hfc-key-store/distributor1')
 	},
 	distributor2: {
 		ca_port: 7058,
-		url: 'grpc://localhost:7071',
+		url: `grpc://${cluster}:7071`,
 		storePath: path.join(__dirname, 'hfc-key-store/distributor2')
 	},
 	tracelabel: {
 		ca_port: 7058,
-		url: 'grpc://localhost:7071',
+		url: `grpc://${cluster}:30051`,
 		storePath: path.join(__dirname, 'hfc-key-store/tracelabel')
 	},
 	admin_distributors: {
-		url: 'grpc://localhost:7071',
+		url: `grpc://${cluster}:7071`,
 		storePath: path.join(__dirname, 'hfc-key-store/admin_distributors')
 	}
 };
 
-let [,, channelName, userOrg, peerOrg] = process.argv;
+
 //const userOrg = "org3";
 //const peerOrg = "brand1";
 const storePath = config[userOrg].storePath;
@@ -96,5 +98,5 @@ Fabric_Client.newDefaultKeyValueStore({ path: storePath
 	// create user1 for brand2
 	return;
 }).catch((err) => {
-	console.error('--> !Failed to query successfully :: ' + err);
+	console.error('--> !Failed to query successfully : ' + err);
 });

@@ -51,9 +51,11 @@ spec:
         tier: middle
     spec:
       containers:
-      - image: registry.eu-de.bluemix.net/hyperledger/fabric-peer:latest
+      - image: ibmblockchain/fabric-peer:1.0.5
         name: fabric-peer
         env:
+        - name: CORE_PEER_NETWORKID
+          value: nid1
         - name: CORE_VM_ENDPOINT
           value: unix:///host/var/run/docker.sock
         - name: CORE_PEER_ID

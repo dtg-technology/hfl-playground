@@ -1,3 +1,4 @@
+#@IgnoreInspection BashAddShebang
 #####################################################
 # Deploy chaincode to the specified peer and channel
 #####################################################
@@ -29,7 +30,7 @@ sleep 10
 # isntantiate to channel
 . ./lib/instantiate_chaincode.sh $CHAINCODE $CHANNEL $ORG1 "OR ('${ORG1}MSP.member','${ORG2}MSP.member')"
 # populate with initial data
-. init_chaincode.sh $CHAINCODE $CHANNEL $ORG1
+. ./lib/init_chaincode.sh $CHAINCODE $CHANNEL $ORG1
 
 
 

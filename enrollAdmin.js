@@ -12,19 +12,22 @@ var path = require('path');
 var util = require('util');
 var os = require('os');
 
+
+let [,, cluster, org] = process.argv;
+
 var config = {
     brand1: {
-        ca_port: 7054,
+        ca_port: 30064,
         ca_name: 'ca.brand1.com',
         msp:  'Brand1MSP'
     },
     brand2: {
-        ca_port: 7055,
+        ca_port: 30074,
         ca_name: 'ca.brand2.com',
         msp:  'Brand2MSP'
     },
     tracelabel: {
-      ca_port: 7057,
+      ca_port: 30054,
       ca_name: 'ca.tracelabel.com',
       msp:  'TraceLabelMSP'
     },
@@ -45,7 +48,7 @@ var config = {
     }
 };
 
-let [,, org] = process.argv;
+
 if (typeof (org) === "undefined" ) {
     console.log("Organization not specified, assuming 'brand1'");
     org = "brand1";
@@ -86,7 +89,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     	verify: false
     };
     // be sure to change the http to https when the CA is running TLS enabled
-    fabric_ca_client = new Fabric_CA_Client(`http://localhost:${caPort}`, tlsOptions , config[org].ca_name, crypto_suite);
+    fabric_ca_client = new Fabric_CA_Client(`http://${cluster}:${caPort}`, tlsOptions , config[org].ca_name, crypto_suite);
 
     // first check to see if the admin is already enrolled
     return fabric_client.getUserContext('admin', true);
@@ -116,7 +119,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
         });
     }
 }).then(() => {
-    console.log('Assigned the admin user to the fabric client ::' + admin_user.toString());
+    console.log('Assigned the admin user to the fabric client :' + admin_user.toString());
 }).catch((err) => {
     console.error('Failed to enroll admin: ' + err);
 });

@@ -46,23 +46,21 @@ spec:
         tier: middle
     spec:
       containers:
-      - image: registry.eu-de.bluemix.net/hyperledger/fabric-ca:latest
+      - image: ibmblockchain/fabric-ca:1.0.5
         name: fabric-ca
         env:
+        - name: CORE_PEER_NETWORKID
+          value: nid1
         - name: FABRIC_CA_HOME
-          value: /etc/hyperledger/fabric-ca-server
+          value: /etc/hyperledger/fabric-ca-server/cfg
         - name: FABRIC_CA_SERVER_CA_NAME
           value: ca.brand2.com
-        - name: FABRIC_CA_SERVER_CA_CERTFILE
-          value: /etc/hyperledger/fabric-ca-server-config/ca-cert.pem
-        - name: FABRIC_CA_SERVER_CA_KEYFILE
-          value: /etc/hyperledger/fabric-ca-server-config/ca-key.pem
         ports:
         - containerPort: 7054
           name: ca
         volumeMounts:
         - name: msp
-          mountPath: /etc/hyperledger/fabric-ca-server-config
+          mountPath: /etc/hyperledger/fabric-ca-server/cfg
           readOnly: true
       volumes:
       - name: msp

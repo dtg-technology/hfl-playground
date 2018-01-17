@@ -63,9 +63,11 @@ spec:
         tier: db
     spec:
       containers:
-      - image: registry.eu-de.bluemix.net/hyperledger/fabric-couchdb:latest
+      - image: ibmblockchain/fabric-couchdb:1.0.5
         name: couchdb
         env:
+        - name: CORE_PEER_NETWORKID
+          value: nid1
         - name: COUCHDB_USER
           valueFrom:
             secretKeyRef:

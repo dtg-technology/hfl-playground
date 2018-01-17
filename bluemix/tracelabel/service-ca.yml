@@ -47,11 +47,13 @@ spec:
         tier: middle
     spec:
       containers:
-      - image: registry.eu-de.bluemix.net/hyperledger/fabric-ca:latest
+      - image: ibmblockchain/fabric-ca:1.0.5
         name: fabric-ca
         command: ["sh"]
         args: ["-c", "fabric-ca-server start -b admin:adminpw -d --cafiles ../ca1/cfg/fabric-ca-config.yaml --cafiles ../ca2/cfg/fabric-ca-config.yaml"]
         env:
+        - name: CORE_PEER_NETWORKID
+          value: nid1
         - name: FABRIC_CA_HOME
           value: /etc/hyperledger/fabric-ca-server/ca
         ports:

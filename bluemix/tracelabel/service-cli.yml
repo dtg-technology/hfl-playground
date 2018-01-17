@@ -48,12 +48,14 @@ spec:
         tier: middle
     spec:
       containers:
-      - image: registry.eu-de.bluemix.net/hyperledger/fabric-tools:latest
+      - image: ibmblockchain/fabric-tools:1.0.5
         name: fabric-cli
         workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         command: ["/bin/bash" ]
         args: ["-c", "sleep 1000000" ]
         env:
+        - name: CORE_PEER_NETWORKID
+          value: nid1
         - name: GOPATH
           value: /opt/gopath
         - name: CORE_VM_ENDPOINT

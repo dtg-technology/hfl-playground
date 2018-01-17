@@ -8,16 +8,18 @@
  * Register and Enroll a user
  */
 
-var config = {
+let [,, cluster, org] = process.argv;
+
+const config = {
     brand1: {
-        ca_port: 7054,
+        ca_port: 30064,
         ca_name: 'ca.brand1.com',
         msp:  'Brand1MSP',
         affiliation_root: 'brand1',
         affiliation: 'department1'
     },
     brand2: {
-        ca_port: 7055,
+        ca_port: 30074,
         ca_name: 'ca.brand2.com',
         msp:  'Brand2MSP',
         affiliation_root: 'brand2',
@@ -29,7 +31,7 @@ var config = {
         msp:  'Org3MSP'
     },
     tracelabel: {
-      ca_port: 7057,
+      ca_port: 30054,
       ca_name: 'ca.tracelabel.com',
       msp:  'TraceLabelMSP'
     },
@@ -56,7 +58,7 @@ var config = {
     }
 };
 
-let [,, org] = process.argv;
+
 if (typeof (org) === "undefined" ) {
     console.log("Organization not specified, assuming 'brand1'");
     org = "brand1";
@@ -98,7 +100,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     	verify: false
     };
     // be sure to change the http to https when the CA is running TLS enabled
-    fabric_ca_client = new Fabric_CA_Client(`http://localhost:${caPort}`, null , caName, crypto_suite);
+    fabric_ca_client = new Fabric_CA_Client(`http://${cluster}:${caPort}`, null , caName, crypto_suite);
 
     // first check to see if the admin is already enrolled
     return fabric_client.getUserContext('admin', true);

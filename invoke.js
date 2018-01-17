@@ -13,6 +13,8 @@ var path = require('path');
 var util = require('util');
 var os = require('os');
 
+
+const [,, cluster, channelName, userOrg, peerOrg] = process.argv;
 //
 var fabric_client = new Fabric_Client();
 // setup the fabric network
@@ -21,47 +23,47 @@ const 	channel_12 = fabric_client.newChannel('channel-1'),
 let config = {
 	brand1: {
 		userOrg: "brand1",
-		url: "grpc://localhost:7051",
-		url2: "grpc://localhost:7053",
+		url: `grpc://${cluster}:30061`,
+		url2: `grpc://${cluster}:30063`,
 		msp: "Brand1MSP",
 		storePath: path.join(__dirname, 'hfc-key-store/brand1')
 	},
 	brand2: {
 		userOrg: "brand2",
-		url: "grpc://localhost:7061",
-		url2: "grpc://localhost:7063",
+		url: `grpc://${cluster}:30071`,
+		url2: `grpc://${cluster}:30073`,
 		msp: "Brand2MSP",
 		storePath: path.join(__dirname, 'hfc-key-store/brand2')
 	},
 	tracelabel: {
-		url: "grpc://localhost:7071",
-		url2: "grpc://localhost:7073",
+		url: `grpc://${cluster}:30051`,
+		url2: `grpc://${cluster}:30053`,
 		msp: "TraceLabelMSP",
 		storePath: path.join(__dirname, 'hfc-key-store/tracelabel')
 	},
 	admin_distributors: {
-		url: "grpc://localhost:7071",
-		url2: "grpc://localhost:7073",
+		url: `grpc://${cluster}:30081`,
+		url2: `grpc://${cluster}:30083`,
 		msp: "DistributorsMSP",
 		storePath: path.join(__dirname, 'hfc-key-store/admin_distributors')
 	},
 	distributor1: {
 		userOrg: "distributor1",
-		url: "grpc://localhost:7071",
-		url2: "grpc://localhost:7073",
+		url: `grpc://${cluster}:7071`,
+		url2: `grpc://${cluster}:7073`,
 		msp: "Distributor1MSP",
 		storePath: path.join(__dirname, 'hfc-key-store/distributor1')
 	},
 	distributor2: {
 		userOrg: "distributor2",
-		url: "grpc://localhost:7071",
-		url2: "grpc://localhost:7073",
+		url: `grpc://${cluster}:7071`,
+		url2: `grpc://${cluster}:7073`,
 		msp: "Distributor2MSP",
 		storePath: path.join(__dirname, 'hfc-key-store/distributor2')
 	}
 };
 
-let [,, channelName, userOrg, peerOrg] = process.argv;
+
 //const userOrg = "org3";
 //const peerOrg = "brand1";
 const store_path = config[userOrg].storePath;
@@ -70,7 +72,7 @@ const peer = fabric_client.newPeer(peerUrl);
 const channel = (channelName === "channel-1" ? channel_12 : channel_23);
 channel.addPeer(peer);
 // setup the fabric network
-var order = fabric_client.newOrderer('grpc://localhost:7050')
+var order = fabric_client.newOrderer(`grpc://${cluster}:30050`)
 channel.addOrderer(order);
 
 //
@@ -176,14 +178,14 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 				var return_status = {event_status : code, tx_id : transaction_id_string};
 				if (code !== 'VALID') {
 					console.error('The transaction was invalid, code = ' + code);
-					resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
+					resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status :'+code));
 				} else {
 					console.log('The transaction has been committed on peer ' + event_hub._ep._endpoint.addr);
 					resolve(return_status);
 				}
 			}, (err) => {
 				//this is the callback if something goes wrong with the event registration or processing
-				reject(new Error('There was a problem with the eventhub ::'+err));
+				reject(new Error('There was a problem with the eventhub :'+err));
 			});
 		});
 		promises.push(txPromise);
@@ -205,8 +207,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	if(results && results[1] && results[1].event_status === 'VALID') {
 		console.log('Successfully committed the change to the ledger by the peer');
 	} else {
-		console.log('Transaction failed to be committed to the ledger due to ::'+results[1].event_status);
+		console.log('Transaction failed to be committed to the ledger due to :'+results[1].event_status);
 	}
 }).catch((err) => {
-	console.error('Failed to invoke successfully :: ' + err);
+	console.error('Failed to invoke successfully : ' + err);
 });

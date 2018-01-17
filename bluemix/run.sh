@@ -19,13 +19,9 @@ echo "${msg}===> Nodes started.${reset}"
 
 
 
-kubectl get pods -L org -L org
+kubectl get pods -L org -L app
 . ./lib/set_bluemix_env.sh
 
 sleep 30
-echo "${msg}===> Deploying Fabric configuration.${reset}"
 
-# lib/deploy_consorcium.sh Consorcium-12 $CHAINCODE $CHANNEL_1 brand1 Distributors
-#. lib/deploy_consorcium.sh Consorcium-23 $CHAINCODE $CHANNEL_2 Brand2 Distributors
-
-echo "${msg}===>  Deployed Fabric configuration.${reset}"
+. ./deploy-application.sh
